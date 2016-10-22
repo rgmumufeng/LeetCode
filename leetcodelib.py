@@ -13,7 +13,7 @@ from collections import deque, Sequence
 def test(method, arguments, answers):
     start_time = time.time()
     for i, arg in enumerate(arguments):
-        if isinstance(arg, Sequence) and not isinstance(arg, basestring):
+        if isinstance(arg, tuple):
             args = arg
         else:
             args = (arg,)
