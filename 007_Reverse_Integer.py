@@ -23,7 +23,7 @@ class Solution(object):
 
 if __name__ == "__main__":
     from leetcodelib import test
-    arguments = [(0,), (123,), (-2147483647,), (-80000,), (1463847422,), (-2147483412,)]
+    arguments = [0, 123, -2147483647, -80000, 1463847422, -2147483412]
     answers = [0, 321, 0, -8, 0, -2143847412]
     test(Solution().reverse, arguments, answers)
 

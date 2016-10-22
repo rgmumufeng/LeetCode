@@ -7,12 +7,16 @@ BinaryTree serialization, deserialization method is borrowed from StefanPochmann
 
 import time
 import numpy as np
-from collections import deque
+from collections import deque, Sequence
 
 
 def test(method, arguments, answers):
     start_time = time.time()
-    for i, args in enumerate(arguments):
+    for i, arg in enumerate(arguments):
+        if isinstance(arg, Sequence) and not isinstance(arg, basestring):
+            args = arg
+        else:
+            args = (arg,)
         result = method(*args)
         if result != answers[i]:
             print "{}: {} != {}".format(i, result, answers[i])
