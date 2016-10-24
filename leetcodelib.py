@@ -5,12 +5,12 @@ BinaryTree serialization, deserialization method is borrowed from StefanPochmann
 (https://discuss.leetcode.com/topic/16600/tree-deserializer-and-visualizer-for-python)
 '''
 
+import yaml
+import os
 import time
-import numpy as np
-from collections import deque, Sequence
+from collections import deque
 
-
-def test(method, arguments, answers):
+def  test(method, arguments, answers):
     start_time = time.time()
     for i, arg in enumerate(arguments):
         if isinstance(arg, tuple):
@@ -18,15 +18,79 @@ def test(method, arguments, answers):
         else:
             args = (arg,)
         result = method(*args)
-        if result != answers[i]:
-            print "{}: {} != {}".format(i, result, answers[i])
-    print("Tests finished in %s seconds" % (time.time() - start_time))
+        if result == answers[i]:
+            print "Case {} passed ...".format(i)
+        else:
+            print "Case {}: {} != {}".format(i, result, answers[i])
+    print("%d tests finished in %s seconds" % (len(arguments), time.time() - start_time))
+
+
+def update_testfile(testfile, arg_names, arguments, answers):
+    arg_orders = arg_names.split(', ')
+    if os.path.isfile(testfile):
+        with open(testfile, 'r') as f:
+            data = yaml.safe_load(f)
+            if data[0]['argument_orders'] != arg_orders:
+                raise ValueError('Input arguments order is not consistent with records!')
+            test_cases = data[1:]
+    else:
+        test_cases = []
     
+    saved_arguments = [tuple([x['input_args'][name] for name in arg_orders]) for x in test_cases]
+    update_file = False
+    for i, input_args in enumerate(arguments):
+        if input_args not in saved_arguments:
+            print "Adding new test case ..."
+            test_cases.append({'input_args': dict(zip(arg_orders, input_args)), 'output_answer': answers[i]})
+            update_file = True
+    
+    if update_file:        
+        for i, case in enumerate(test_cases):
+            case['case_number'] = i
+        stream = yaml.safe_dump([dict(argument_orders=arg_orders)] + test_cases, indent=4)
+        stream = stream.replace('\n- ', '\n\n- ')
+        with open(testfile, 'w') as f:
+            f.write(stream)
+        print "File is updated."
+    else:
+        print "Nothing to update. Original file is kept"
+    
+
+def run_testfile(testfile, method, inds=None):
+    with open(testfile, 'r') as f:
+        data = yaml.safe_load(f)
+        arg_orders = data[0]['argument_orders']
+        test_cases = data[1:]
+    
+    if isinstance(inds, int):
+        n = min(inds, len(test_cases))
+        test_cases = test_cases[:n]
+    elif isinstance(inds, (list, tuple)):
+        n = len(inds)
+        test_cases = [test_cases[i] for i in inds]
+    elif inds == None:
+        n = len(test_cases)
+    else:
+        raise ValueError("Invalid arguments 'inds': {}".format(inds))
+    
+    start_time = time.time()
+    for case in test_cases:
+        args = tuple([case['input_args'][name] for name in arg_orders])
+        result = method(*args)
+        if result == case['output_answer']:
+            print "Case {} passed ...".format(case['case_number'])
+        else:
+            print "Case {}: {} != {}".format(case['case_number'], result, case['output_answer'])
+    print("%d tests finished in %s seconds" % (n, time.time() - start_time))
+
 
 class ListNode(object):
     def __init__(self, x):
         self.val = x
         self.next = None
+        
+    def __repr__(self):
+        return "ListNode %s" % str(self.val)
 
         
 class LinkedList(object):
@@ -37,6 +101,10 @@ class LinkedList(object):
             self.head = None
         else:
             self.load(inputs)
+            
+    def __repr__(self):
+        s = "->".join([str(x) for x in self.values()])
+        return "LinkedList %s" % s
 
     def load(self, numbers):
         node = dummy = ListNode(None)

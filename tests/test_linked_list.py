@@ -1,4 +1,4 @@
-from leetcodelib import LinkedList
+from solutions.leetcodelib import LinkedList
 
 def test():
     import time
@@ -9,6 +9,9 @@ def test():
     numbers = np.random.randint(1000, size=10000)
     list1 = LinkedList(numbers)
     list1.write()
+    print list1
+    print list1.head
+    
     if np.any(list1.values() != numbers):
         print "generated linked list values not equal to original numbers"
         

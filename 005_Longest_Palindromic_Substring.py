@@ -50,9 +50,8 @@ class Solution2(object):
 
 
 if __name__ == "__main__":
-    from leetcodelib import test
-    import json
-    with open('005_Longest_Palindromic_Substring.dat', 'r') as f:
-        arguments, answers = json.load(f)
-    test(Solution1().longestPalindrome, arguments, answers)
-    test(Solution2().longestPalindrome, arguments, answers)
+    from leetcodelib import run_testfile
+    testfile = __file__.replace('.py', '.yaml')
+    run_testfile(testfile, Solution1().longestPalindrome)
+    run_testfile(testfile, Solution2().longestPalindrome)
+    

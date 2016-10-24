@@ -75,15 +75,12 @@ class Solution4(object):
         return maxarea
 
 if __name__ == "__main__":
-    from leetcodelib import test
-    import json
-    with open("011_COntainer_With_Most_Water.dat", "r") as f:
-        arguments, answers = json.load(f)
-
-    test(Solution1().maxArea, arguments, answers)
-    test(Solution2().maxArea, arguments, answers)
-    test(Solution3().maxArea, arguments, answers)
-    test(Solution4().maxArea, arguments, answers)
+    from leetcodelib import run_testfile
+    testfile = __file__.replace('.py', '.yaml')
+    run_testfile(testfile, Solution1().maxArea)
+    run_testfile(testfile, Solution2().maxArea)
+    run_testfile(testfile, Solution3().maxArea)
+    run_testfile(testfile, Solution4().maxArea)
 
         
 
