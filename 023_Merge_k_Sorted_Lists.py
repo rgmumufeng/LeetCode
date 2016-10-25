@@ -96,12 +96,12 @@ if __name__ == "__main__":
     
     testfile = __file__.replace('.py', '.yaml')
     
-    #arg_names = 'num_lists'
-    #k = randint(1, 20)
-    #args = [sorted(sample(range(100), randint(1, 10))) for _ in xrange(k)]
-    #answer = sorted([x for l in args for x in l])
-    #update_testfile(testfile, arg_names, [(args,)], [answer])
-
+    arg_names = 'num_lists'
+    k = randint(1, 20)
+    args = [sorted(sample(range(100), randint(1, 10))) for _ in xrange(k)]
+    answer = sorted([x for l in args for x in l])
+    update_testfile(testfile, arg_names, [args], [answer])
+    '''
     with open(testfile, 'r') as f:
         data = yaml.safe_load(f)
         arg_orders = data[0]['argument_orders']
@@ -117,4 +117,4 @@ if __name__ == "__main__":
     test(Solution1().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
     test(Solution2().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
     test(Solution3().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
-    
+    '''

@@ -12,11 +12,11 @@ from collections import deque
 
 def  test(method, arguments, answers):
     start_time = time.time()
-    for i, arg in enumerate(arguments):
-        if isinstance(arg, tuple):
-            args = arg
+    for i, raw_args in enumerate(arguments):
+        if isinstance(raw_args, tuple):
+            args = raw_args
         else:
-            args = (arg,)
+            args = (raw_args,)
         result = method(*args)
         if result == answers[i]:
             print "Case {} passed ...".format(i)
@@ -38,7 +38,11 @@ def update_testfile(testfile, arg_names, arguments, answers):
     
     saved_arguments = [tuple([x['input_args'][name] for name in arg_orders]) for x in test_cases]
     update_file = False
-    for i, input_args in enumerate(arguments):
+    for i, raw_input_args in enumerate(arguments):
+        if isinstance(raw_input_args, tuple):
+            input_args = raw_input_args
+        else:
+            input_args = (raw_input_args,)
         if input_args not in saved_arguments:
             print "Adding new test case ..."
             test_cases.append({'input_args': dict(zip(arg_orders, input_args)), 'output_answer': answers[i]})
