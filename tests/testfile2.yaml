@@ -1,0 +1,25 @@
+-   argument_orders: [a, b]
+
+-   case_number: 0
+    input_args:
+        a: 1
+        b: [2, 3]
+    output_answer: [3, 3]
+
+-   case_number: 1
+    input_args:
+        a: 4
+        b: [7, 9]
+    output_answer: [11, 36]
+
+-   case_number: 2
+    input_args:
+        a: 5
+        b: [8, 7]
+    output_answer: [13, 35]
+
+-   case_number: 3
+    input_args:
+        a: 11
+        b: [2, 10]
+    output_answer: [13, 121]

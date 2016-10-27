@@ -1,6 +1,6 @@
 from solutions.leetcodelib import BinaryTree
 
-def test():
+def test_binary_tree():
     import time
     start_time = time.time()
     # Insert test functions below
@@ -22,4 +22,4 @@ def test():
     print("Tests finished in %s seconds" % (time.time() - start_time))
 
 if __name__ == "__main__":
-    test()
+    test_binary_tree()

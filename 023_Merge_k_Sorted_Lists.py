@@ -90,31 +90,27 @@ class Solution3(object):
         return LinkedList(dummy.next).values()    
 
 if __name__ == "__main__":
-    from leetcodelib import test, update_testfile
+    from leetcodelib import test, update_testfile, load_testfile
     from random import sample, randint
     import yaml
     
     testfile = __file__.replace('.py', '.yaml')
     
-    arg_names = 'num_lists'
-    k = randint(1, 20)
-    args = [sorted(sample(range(100), randint(1, 10))) for _ in xrange(k)]
-    answer = sorted([x for l in args for x in l])
-    update_testfile(testfile, arg_names, [args], [answer])
-    '''
-    with open(testfile, 'r') as f:
-        data = yaml.safe_load(f)
-        arg_orders = data[0]['argument_orders']
-        test_cases = data[1:]
-        
-    arguments, answers = [], []
-    arg_name = arg_orders[0]
+    def add_new_testcases():
+        arg_names = 'num_lists'
+        k = randint(1, 20)
+        args = [sorted(sample(range(100), randint(1, 10))) for _ in xrange(k)]
+        answer = sorted([x for l in args for x in l])
+        update_testfile(testfile, arg_names, [args], [answer])
     
-    test_lists = [case['input_args'][arg_name] for case in test_cases]
-    arguments = [[LinkedList(x).head for x in lists] for lists in test_lists]
-    answers = [case['output_answer'] for case in test_cases]
+    arg_orders, arguments, answers = load_testfile(testfile)
     
-    test(Solution1().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
-    test(Solution2().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
-    test(Solution3().mergeKLists, [[LinkedList(x).head for x in lists] for lists in test_lists], answers)
-    '''
+    #print len(arguments), len(answers)
+    #print arguments[-1][0]
+    #arguments = [([LinkedList(x).head for x in args[0]],) for args in arguments]
+    #print arguments[-1][0]
+    
+    test(Solution1().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    test(Solution2().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    test(Solution3().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    

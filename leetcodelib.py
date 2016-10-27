@@ -5,87 +5,87 @@ BinaryTree serialization, deserialization method is borrowed from StefanPochmann
 (https://discuss.leetcode.com/topic/16600/tree-deserializer-and-visualizer-for-python)
 '''
 
-import yaml
-import os
-import time
+import os, time, yaml
 from collections import deque
 
-def  test(method, arguments, answers):
+def test(method, arguments, answers, inds=None):
+    if inds == None:
+        inds = range(len(arguments))
+    elif isinstance(inds, int):
+        inds = range(min(inds, len(arguments)))
+    elif not isinstance(inds, (list, tuple)):
+        raise ValueError("Invalid argument 'inds': {}".format(inds))
+    
     start_time = time.time()
-    for i, raw_args in enumerate(arguments):
-        if isinstance(raw_args, tuple):
-            args = raw_args
+    for i in inds:
+        if isinstance(arguments[i], tuple):
+            args = arguments[i]
         else:
-            args = (raw_args,)
+            args = (arguments[i],)
         result = method(*args)
         if result == answers[i]:
             print "Case {} passed ...".format(i)
         else:
-            print "Case {}: {} != {}".format(i, result, answers[i])
-    print("%d tests finished in %s seconds" % (len(arguments), time.time() - start_time))
+            print "Case {} did NOT pass !!!\nresult: {}\nanswer: {}".format(i, result, answers[i])
+    print("%d tests finished in %s seconds\n" % (len(inds), time.time() - start_time))
 
 
-def update_testfile(testfile, arg_names, arguments, answers):
-    arg_orders = arg_names.split(', ')
+def load_testfile(testfile):
     if os.path.isfile(testfile):
         with open(testfile, 'r') as f:
             data = yaml.safe_load(f)
-            if data[0]['argument_orders'] != arg_orders:
-                raise ValueError('Input arguments order is not consistent with records!')
+            arg_orders = data[0]['argument_orders']
             test_cases = data[1:]
+        arguments = [tuple([x['input_args'][name] for name in arg_orders]) for x in test_cases]
+        answers = [x['output_answer'] for x in test_cases]
+        return arg_orders, arguments, answers
     else:
-        test_cases = []
+        return [], [], []
+
+
+def update_testfile(testfile, arg_names, arguments, answers, inds=None):
+    if inds == None:
+        inds = range(len(arguments))
+    elif isinstance(inds, int):
+        inds = range(min(inds, len(arguments)))
+    elif not isinstance(inds, (list, tuple)):
+        raise ValueError("Invalid arguments 'inds': {}".format(inds))
     
-    saved_arguments = [tuple([x['input_args'][name] for name in arg_orders]) for x in test_cases]
-    update_file = False
-    for i, raw_input_args in enumerate(arguments):
-        if isinstance(raw_input_args, tuple):
-            input_args = raw_input_args
+    saved_arg_orders, saved_arguments, saved_answers = load_testfile(testfile)
+    arg_orders = arg_names.split(', ')
+    if saved_arg_orders and saved_arg_orders != arg_orders:
+        raise ValueError("Argument names mismatch!")
+    print "%d test cases in total." % len(saved_arguments)
+    
+    new_cases = []
+    for i in inds:
+        if isinstance(arguments[i], tuple):
+            input_args = arguments[i]
         else:
-            input_args = (raw_input_args,)
+            input_args = (arguments[i],)
         if input_args not in saved_arguments:
-            print "Adding new test case ..."
-            test_cases.append({'input_args': dict(zip(arg_orders, input_args)), 'output_answer': answers[i]})
-            update_file = True
+            case = {'case_number': len(saved_arguments) + len(new_cases),
+                    'input_args': dict(zip(arg_orders, input_args)), 
+                    'output_answer': answers[i]}
+            new_cases.append(case)
+            print "New case added. %d test cases in total." % (len(saved_arguments)+len(new_cases))
     
-    if update_file:        
-        for i, case in enumerate(test_cases):
-            case['case_number'] = i
-        stream = yaml.safe_dump([dict(argument_orders=arg_orders)] + test_cases, indent=4)
-        stream = stream.replace('\n- ', '\n\n- ')
-        with open(testfile, 'w') as f:
+    if new_cases:
+        with open(testfile, 'a') as f:
+            if len(saved_arguments) == 0:
+                yaml.safe_dump([{'argument_orders': arg_orders}], f)
+            stream = yaml.safe_dump(new_cases, indent=4)
+            stream = '\n' + stream.replace('\n- ', '\n\n- ')
             f.write(stream)
         print "File is updated."
     else:
         print "Nothing to update. Original file is kept"
-    
+        
 
 def run_testfile(testfile, method, inds=None):
-    with open(testfile, 'r') as f:
-        data = yaml.safe_load(f)
-        arg_orders = data[0]['argument_orders']
-        test_cases = data[1:]
-    
-    if isinstance(inds, int):
-        n = min(inds, len(test_cases))
-        test_cases = test_cases[:n]
-    elif isinstance(inds, (list, tuple)):
-        n = len(inds)
-        test_cases = [test_cases[i] for i in inds]
-    elif inds == None:
-        n = len(test_cases)
-    else:
-        raise ValueError("Invalid arguments 'inds': {}".format(inds))
-    
-    start_time = time.time()
-    for case in test_cases:
-        args = tuple([case['input_args'][name] for name in arg_orders])
-        result = method(*args)
-        if result == case['output_answer']:
-            print "Case {} passed ...".format(case['case_number'])
-        else:
-            print "Case {}: {} != {}".format(case['case_number'], result, case['output_answer'])
-    print("%d tests finished in %s seconds" % (n, time.time() - start_time))
+    arg_orders, arguments, answers = load_testfile(testfile)
+    test(method, arguments, answers, inds)
+    return
 
 
 class ListNode(object):

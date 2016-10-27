@@ -70,11 +70,49 @@ class Solution2(object):
                 res.append(pi)
             pi += 1
         return res
+    
+class Solution3(object):
+    def findSubstring(self, s, words):
+        """
+        :type s: str
+        :type words: List[str]
+        :rtype: List[int]
+        """
+        if not words:
+            return []
+        
+        length = len(words[0])
+        if length == 0:
+            return range(len(s)+1)
+        
+        
+        mp = {}
+        for word in words:
+            if word in mp: 
+                mp[word] += 1
+            else:
+                mp[word] = 1
 
+        res = []
+        total_length = length * len(words)
+        for i in xrange(len(s)-total_length+1):
+            counter = dict(mp)
+            valid = True
+            for j in xrange(i, i+total_length, length):
+                w = s[j:j+length]
+                if w in counter and counter[w] > 0:
+                    counter[w] -= 1
+                else:
+                    valid = False
+                    break
+            if valid:
+                res.append(i) 
+        return res
 
 if __name__ == "__main__":
     from leetcodelib import run_testfile
     testfile = __file__.replace('.py', '.yaml')
     
-    run_testfile(testfile, Solution1().findSubstring)
-    run_testfile(testfile, Solution2().findSubstring, 3)
+    run_testfile(testfile, Solution1().findSubstring, [3, 2])
+    #run_testfile(testfile, Solution2().findSubstring, 3)
+    run_testfile(testfile, Solution3().findSubstring)

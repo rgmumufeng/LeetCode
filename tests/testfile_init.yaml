@@ -1,0 +1,19 @@
+- argument_orders: [s, words]
+
+-   case_number: 0
+    input_args:
+        s: apple
+        words: [app, le]
+    output_answer: [0]
+
+-   case_number: 1
+    input_args:
+        s: aaa
+        words: [a, b]
+    output_answer: []
+
+-   case_number: 2
+    input_args:
+        s: pearape
+        words: [p, e, a]
+    output_answer: [0, 4]
