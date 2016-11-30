@@ -186,7 +186,21 @@ class BinaryTree(object):
     def write(self, root=None):
         for x in self.values(root):
             print x,
-        print      
+        print
+        
+    def inorder(self, root=None):
+        def helper(node, values):
+            if node:
+                helper(node.left, values)
+                values.append(node.val)
+                helper(node.right, values)
+        if not root:
+            root = self.root
+        values = []
+        helper(root, values)
+        return values
+        
+            
 
 
     
