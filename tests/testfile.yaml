@@ -27,12 +27,6 @@
 
 -   case_number: 4
     input_args:
-        s: apple
-        words: [app, le]
-    output_answer: [0]
-
--   case_number: 5
-    input_args:
         s: pearape
         words: [p, e, a]
     output_answer: [0, 4]

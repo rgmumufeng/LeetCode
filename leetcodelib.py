@@ -28,7 +28,7 @@ def test(method, arguments, answers, inds=None):
         else:
             print "Case {} did NOT pass !!!\nresult: {}\nanswer: {}".format(i, result, answers[i])
     print("%d tests finished in %s seconds\n" % (len(inds), time.time() - start_time))
-
+        
 
 def load_testfile(testfile):
     if os.path.isfile(testfile):
@@ -40,10 +40,38 @@ def load_testfile(testfile):
         answers = [x['output_answer'] for x in test_cases]
         return arg_orders, arguments, answers
     else:
-        return [], [], []
+        raise ValueError("File does not exist!")
+    
+
+def generate_testfile_stream(arg_orders, arguments, answers, num_existed=0):
+    new_cases = []
+    for i in xrange(len(arguments)):
+        if isinstance(arguments[i], tuple):
+            input_args = arguments[i]
+        else:
+            input_args = (arguments[i],)
+        
+        if len(input_args) != len(arg_orders):
+            raise ValueError("Wrong arguments for case {}".format(i))
+        
+        case = {'case_number': i + num_existed,
+                'input_args': dict(zip(arg_orders, input_args)), 
+                'output_answer': answers[i]}
+        new_cases.append(case)
+
+    stream = yaml.safe_dump(new_cases, indent=4)
+    stream = '\n' + stream.replace('\n- ', '\n\n- ')
+    return stream
 
 
-def update_testfile(testfile, arg_names, arguments, answers, inds=None):
+def update_testfile(testfile, arg_names, arguments, answers, mode='generate', inds=None):
+    '''
+    mode: 'generate': generate new
+          'add': append to existed
+    '''
+    if len(arguments) != len(answers):
+        raise ValueError("Length of arguments and answers mismatch!")
+    
     if inds == None:
         inds = range(len(arguments))
     elif isinstance(inds, int):
@@ -51,39 +79,37 @@ def update_testfile(testfile, arg_names, arguments, answers, inds=None):
     elif not isinstance(inds, (list, tuple)):
         raise ValueError("Invalid arguments 'inds': {}".format(inds))
     
-    saved_arg_orders, saved_arguments, saved_answers = load_testfile(testfile)
-    arg_orders = arg_names.split(', ')
-    if saved_arg_orders and saved_arg_orders != arg_orders:
-        raise ValueError("Argument names mismatch!")
-    print "%d test cases in total." % len(saved_arguments)
-    
-    new_cases = []
-    for i in inds:
-        if isinstance(arguments[i], tuple):
-            input_args = arguments[i]
-        else:
-            input_args = (arguments[i],)
-        if input_args not in saved_arguments:
-            case = {'case_number': len(saved_arguments) + len(new_cases),
-                    'input_args': dict(zip(arg_orders, input_args)), 
-                    'output_answer': answers[i]}
-            new_cases.append(case)
-            print "New case added. %d test cases in total." % (len(saved_arguments)+len(new_cases))
-    
-    if new_cases:
-        with open(testfile, 'a') as f:
-            if len(saved_arguments) == 0:
-                yaml.safe_dump([{'argument_orders': arg_orders}], f)
-            stream = yaml.safe_dump(new_cases, indent=4)
-            stream = '\n' + stream.replace('\n- ', '\n\n- ')
-            f.write(stream)
-        print "File is updated."
-    else:
-        print "Nothing to update. Original file is kept"
+    if len(inds) <= 0:
+        print "Nothing to update. Original file is kept (if existed)."
+        return
         
+    arg_orders = arg_names.split(', ')
+    new_arguments = [arguments[i] for i in inds]
+    new_answers = [answers[i] for i in inds]
+    
+    if mode == "generate":
+        with open(testfile, 'w') as f:
+            yaml.safe_dump([{'argument_orders': arg_orders}], f)
+        num_existed = 0
+    elif mode == "add":
+        saved_arg_orders, saved_arguments, _ = load_testfile(testfile)
+        if saved_arg_orders != arg_orders:
+            raise ValueError("New argument names are different from saved ones!")
+        num_existed = len(saved_arguments)
+    else:
+        raise ValueError("Invalid mode. Should be 'generate' or 'add'.")
+    
+    with open(testfile, 'a') as f:
+        print "%d test cases existed." % num_existed
+        stream = generate_testfile_stream(arg_orders, new_arguments, new_answers, num_existed)
+        #print stream
+        print "%d new test cases added." % len(new_arguments)
+        f.write(stream)
+        print "File is updated."
+
 
 def run_testfile(testfile, method, inds=None):
-    arg_orders, arguments, answers = load_testfile(testfile)
+    _, arguments, answers = load_testfile(testfile)
     test(method, arguments, answers, inds)
     return
 
