@@ -1,0 +1,37 @@
+- argument_orders: [matrix]
+
+-   case_number: 0
+    input_args:
+        matrix:
+        - [1, 2, 3]
+        - [4, 5, 6]
+    output_answer:
+    - [1, 2, 3]
+    - [4, 5, 6]
+
+-   case_number: 1
+    input_args:
+        matrix:
+        - [0, 1, 2]
+        - [4, 5, 6]
+    output_answer:
+    - [0, 0, 0]
+    - [0, 5, 6]
+
+-   case_number: 2
+    input_args:
+        matrix:
+        - [1, 2, 3]
+        - [4, 0, 6]
+    output_answer:
+    - [1, 0, 3]
+    - [0, 0, 0]
+
+-   case_number: 3
+    input_args:
+        matrix:
+        - [0, 1, 2]
+        - [4, 0, 6]
+    output_answer:
+    - [0, 0, 0]
+    - [0, 0, 0]

@@ -1,4 +1,4 @@
-class Solution(object):
+class Solution1(object):
     def sortColors(self, nums):
         """
         :type nums: List[int]
@@ -38,6 +38,34 @@ class Solution(object):
                     nums[p], nums[red] = nums[red], nums[p]
                     red += 1
                 p += 1
+        return nums
+
+class Solution(object):
+    def sortColors(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: void Do not return anything, modify nums in-place instead.
+        """
+        if not nums or len(nums) <= 1:
+            return
+        
+        red, blue = 0, len(nums)
+        # check: i
+        # red color: 0:red
+        # white color: red:i
+        # unknown: i:blue
+        # blue color: blue:len(nums)
+        i = 0
+        while i < blue:
+            if nums[i] == 0:
+                nums[i], nums[red] = nums[red], nums[i]
+                red += 1
+                i += 1
+            elif nums[i] == 2:
+                blue -= 1
+                nums[i], nums[blue] = nums[blue], nums[i]
+            else:
+                i += 1
         return nums
 
 

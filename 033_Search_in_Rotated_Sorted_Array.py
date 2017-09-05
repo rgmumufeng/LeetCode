@@ -90,13 +90,62 @@ def find_head(nums):
             j = mid+1
         print 'search in', nums[i:j]
     return i
+
+
+class Solution3(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        if not nums:
+            return -1
+        
+        def recursive(i, j, target):
+            if j-i == 1:
+                return i if target == nums[i] else -1
+            else:
+                mid = (i+j)/2
+                if (nums[i] <= target <= nums[mid-1]) \
+                    or target < nums[mid] <= nums[j-1] \
+                    or nums[mid] <= nums[j-1] < target:
+                    return recursive(i, mid, target)
+                else:
+                    return recursive(mid, j, target)
+        return recursive(0, len(nums), target)
+        
+        
+class Solution4(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        if not nums:
+            return -1
+        
+        i, j = 0, len(nums)
+        while j-i > 1:
+            mid = (i+j)/2
+            if nums[i] <= target <= nums[mid-1] \
+            or target < nums[mid] <= nums[j-1] \
+            or nums[mid] <= nums[j-1] < target:
+                j = mid
+            else:
+                i = mid
+        
+        return i if  nums[i] == target else -1
+        
             
+        
 
 if __name__ == "__main__":
     from leetcodelib import test, update_testfile, run_testfile
     arguments = [([1, 3], 3), ([5, 1, 3], 1), ([3, 1], 3)]
     answers = [1, 1, 0]
-    test(Solution2().search, arguments, answers)
+    test(Solution4().search, arguments, answers)
     
     #testfile = __file__.replace('.py', '.yaml')
     #arg_names = ""
