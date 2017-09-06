@@ -8,7 +8,25 @@ BinaryTree serialization, deserialization method is borrowed from StefanPochmann
 import os, time, yaml
 from collections import deque
 
-def test(method, arguments, answers, inds=None):
+
+def transfer(a, b, mode):
+    if mode == 'direct':
+        return a, b
+    
+    elif isinstance(a, ListNode) or isinstance(b, ListNode):
+        return LinkedList(a).values(), LinkedList(b).values()
+    
+    elif mode == '1D':
+        return sorted(a), sorted(b)
+    
+    elif mode == '2D':
+        return sorted([sorted(x) for x in a]), sorted([sorted(x) for x in b])
+
+    else:
+        return a, b
+    
+
+def test(method, arguments, answers, inds=None, mode=None):
     if inds == None:
         inds = range(len(arguments))
     elif isinstance(inds, int):
@@ -23,12 +41,13 @@ def test(method, arguments, answers, inds=None):
         else:
             args = (arguments[i],)
         result = method(*args)
-        if result == answers[i]:
+        result, answer = transfer(result, answers[i], mode)
+        if result == answer:
             print "Case {} passed ...".format(i)
         else:
-            print "Case {} did NOT pass !!!\nresult: {}\nanswer: {}".format(i, result, answers[i])
+            print "Case {} did NOT pass !!!\nresult: {}\nanswer: {}".format(i, result, answer)
     print("%d tests finished in %s seconds\n" % (len(inds), time.time() - start_time))
-        
+    
 
 def load_testfile(testfile):
     if os.path.isfile(testfile):
@@ -225,10 +244,4 @@ class BinaryTree(object):
         values = []
         helper(root, values)
         return values
-        
-            
 
-
-    
-
-    
