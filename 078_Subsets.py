@@ -1,4 +1,4 @@
-class Solution(object):
+class Solution1(object):
     def subsets(self, nums):
         """
         :type nums: List[int]
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     from leetcodelib import test, update_testfile, run_testfile
     arguments = [[1, 2, 3]]
     answers = [[[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]]
-    test(Solution2().subsets, arguments, answers)
+    test(Solution2().subsets, arguments, answers, mode='2D_sets')
     
     #testfile = __file__.replace('.py', '.yaml')
     #arg_names = ""
