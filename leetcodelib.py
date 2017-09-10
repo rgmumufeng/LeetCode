@@ -244,4 +244,74 @@ class BinaryTree(object):
         values = []
         helper(root, values)
         return values
+    
+    def preorder(self, root=None):
+        def helper(node, values):
+            if node:
+                values.append(node.val)
+                helper(node.left, values)
+                helper(node.right, values)
+        if not root:
+            root = self.root
+        values = []
+        helper(root, values)
+        return values
+    
+    def postorder(self, root=None):
+        def helper(node, values):
+            if node:
+                helper(node.left, values)
+                helper(node.right, values)
+                values.append(node.val)
+        if not root:
+            root = self.root
+        values = []
+        helper(root, values)
+        return values
+    
+    
+    def morris_inorder(self, root=None):
+        if not root:
+            root = self.root
+        node, values = root, []
+        while node:
+            if not node.left:
+                values.append(node.val)
+                node = node.right
+            else:
+                tmp = node.left
+                while tmp.right and tmp.right != node:
+                    tmp = tmp.right
+                if not tmp.right:
+                    tmp.right = node
+                    node = node.left
+                else:
+                    tmp.right = None
+                    values.append(node.val)
+                    node = node.right
+        return values
+    
+    def morris_preorder(self, root=None):
+        if not root:
+            root = self.root
+        node, values = root, []
+        while node:
+            if not node.left:
+                values.append(node.val)
+                node = node.right
+            else:
+                tmp = node.left
+                while tmp.right and tmp.right != node:
+                    tmp = tmp.right
+                if not tmp.right:
+                    tmp.right = node
+                    values.append(node.val)
+                    node = node.left
+                else:
+                    tmp.right = None
+                    node = node.right
+        return values
+                    
+                    
+                
 
