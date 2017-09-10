@@ -16,14 +16,16 @@ class Solution(object):
         prev = dummy
         for _ in xrange(m-1):
             prev = prev.next
-        revprev, revhead = prev, prev.next
-        curr = prev.next
-        folw = curr.next
+        curr = prev.next    
+        
+        revprev, revhead = prev, curr
+        prev, curr = curr, curr.next
+        
         for _ in xrange(n-m):
-            prev, curr, folw = curr, folw, folw.next
-            curr.next = prev
-        revhead.next = folw
-        revprev.next = curr
+            curr.next, prev, curr = prev, curr, curr.next
+
+        revhead.next = curr
+        revprev.next = prev
         return dummy.next
         
 
