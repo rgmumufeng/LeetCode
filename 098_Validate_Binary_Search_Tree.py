@@ -43,7 +43,7 @@ if __name__ == "__main__":
             [4, 2, 5, 1, 3, 7, 6],
             [10, 5, 15, None, None, 6, 20]]
     
-    arguments = [BinaryTree(nums).root for nums in nums]
+    arguments = [BinaryTree(num).root for num in nums]
     answers = [True, False, False, False]
     test(Solution2().isValidBST, arguments, answers, inds=None)
     
