@@ -17,7 +17,16 @@ def transfer(a, b, mode):
         return LinkedList(a).values(), LinkedList(b).values()
     
     elif isinstance(a, TreeNode) or isinstance(b, TreeNode):
-        return BinaryTree(a).values(), BinaryTree(b).values()
+        if mode in ['preorder', 'inorder', 'postorder']:
+            a = eval('BinaryTree(a).{}() if isinstance(a, TreeNode) else a'.format(mode))
+            b = eval('BinaryTree(b).{}() if isinstance(b, TreeNode) else b'.format(mode))
+        elif mode == 'levelorder':
+            a = [x for x in BinaryTree(a).values()] if isinstance(a, TreeNode) else a
+            b = [x for x in BinaryTree(b).values()] if isinstance(b, TreeNode) else b
+        else:
+            a = [x for x in BinaryTree(a).values()] if isinstance(a, TreeNode) else a
+            b = [x for x in BinaryTree(b).values()] if isinstance(b, TreeNode) else b
+        return a, b
     
     elif mode == '1D':
         return sorted(a), sorted(b)
