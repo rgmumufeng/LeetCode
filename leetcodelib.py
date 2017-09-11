@@ -16,6 +16,9 @@ def transfer(a, b, mode):
     elif isinstance(a, ListNode) or isinstance(b, ListNode):
         return LinkedList(a).values(), LinkedList(b).values()
     
+    elif isinstance(a, TreeNode) or isinstance(b, TreeNode):
+        return BinaryTree(a).values(), BinaryTree(b).values()
+    
     elif mode == '1D':
         return sorted(a), sorted(b)
     
