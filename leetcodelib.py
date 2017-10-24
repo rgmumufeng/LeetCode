@@ -38,8 +38,8 @@ def transfer(a, b, mode):
         return a, b
     
 
-def test(method, arguments, answers, inds=None, mode=None):
-    if inds == None:
+def test(method, arguments, answers, inds=[], mode=None):
+    if inds == []:
         inds = range(len(arguments))
     elif isinstance(inds, int):
         inds = range(min(inds, len(arguments)))
