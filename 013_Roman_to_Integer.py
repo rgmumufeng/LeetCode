@@ -19,8 +19,21 @@ class Solution(object):
             i += 1
         return num
     
+class Solution2(object):
+    def romanToInt(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        keys = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
+        values = [1, 5, 10, 50, 100, 500, 1000]
+        ref = dict(zip(keys, values))
+        res = 0
+        for i in xrange(len(s)-1):
+            res = res-ref[s[i]] if ref[s[i+1]] > ref[s[i]] else res+ref[s[i]]
+        return res + ref[s[-1]]
 if __name__ == "__main__":
     from leetcodelib import test
     arguments = ['I', 'III', 'V', 'X', 'XXIII', 'XLVII', 'XCIV', 'MMMCCXCVII']
     answers = [1, 3, 5, 10, 23, 47, 94, 3297]
-    test(Solution().romanToInt, arguments, answers)
+    test(Solution2().romanToInt, arguments, answers)

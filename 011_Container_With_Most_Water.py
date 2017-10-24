@@ -73,14 +73,28 @@ class Solution4(object):
             if area > maxarea:
                 maxarea = area
         return maxarea
+    
+class Solution5(object):
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        ih, it = 0, len(height)-1
+        maxarea = 0
+        while ih < it:
+            maxarea = max(maxarea, (it-ih)*min(height[it], height[ih]))
+            if height[ih] < height[it]:
+                ih += 1
+            else:
+                it -= 1
+        return maxarea
 
 if __name__ == "__main__":
     from leetcodelib import run_testfile
     testfile = __file__.replace('.py', '.yaml')
-    run_testfile(testfile, Solution1().maxArea)
-    run_testfile(testfile, Solution2().maxArea)
-    run_testfile(testfile, Solution3().maxArea)
-    run_testfile(testfile, Solution4().maxArea)
+    run_testfile(testfile, Solution5().maxArea)
+
 
         
 

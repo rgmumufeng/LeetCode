@@ -18,8 +18,26 @@ class Solution(object):
             i += 1
         return prefix
 
+
+class Solution2(object):
+    def longestCommonPrefix(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: str
+        """
+        if not strs:
+            return ""
+        
+        i = 0
+        while i < len(strs[0]):
+            for j in xrange(1, len(strs)):
+                if i >= len(strs[j]) or strs[j][i] != strs[0][i]:
+                    return strs[0][:i]
+            i += 1
+        return strs[0][:i]
+            
 if __name__ == "__main__":
     from leetcodelib import test
     arguments = [['abc', 'abf', 'ab'], ['abc', 'abf', 'a'], ['abc', 'bcd'], ['abc', 'ae']]
     answers = ['ab', 'a', '', 'a']
-    test(Solution().longestCommonPrefix, arguments, answers)
+    test(Solution2().longestCommonPrefix, arguments, answers)

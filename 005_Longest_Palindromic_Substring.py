@@ -49,9 +49,57 @@ class Solution2(object):
         return s[i0:j0+1]
 
 
+class Solution3(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if len(s) <= 1:
+            return s
+        
+        palin = ""
+        for center in xrange(len(s)-1):
+            i, j = center, center+1
+            while i > 0 and j < len(s) and s[i-1] == s[j]:
+                i -= 1
+                j += 1
+            if j-i > len(palin):
+                palin = s[i:j]
+            
+            i = j = center
+            while i >= 0 and j < len(s) and s[i] == s[j+1]:
+                i -= 1
+                j += 1
+            if j-i > len(palin):
+                palin = s[i+1:j+1]
+            if 2*(len(s)-center)-1 <= len(palin):
+                break
+        return palin
+    
+class Solution4(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if len(s) <= 1:
+            return s
+        center, i, j = 0, 0, 1
+        while len(s)-center > (j-i)/2:
+            h = t = center
+            while t < len(s)-1 and s[t+1] == s[t]:
+                t += 1
+            center =  t+1
+            while h > 0 and t < len(s)-1 and s[h-1] == s[t+1]:
+                h -= 1
+                t += 1
+            if t-h+1 > j-i:
+                i, j = h, t+1
+        return s[i:j]      
+
 if __name__ == "__main__":
     from leetcodelib import run_testfile
     testfile = __file__.replace('.py', '.yaml')
-    run_testfile(testfile, Solution1().longestPalindrome)
-    run_testfile(testfile, Solution2().longestPalindrome)
+    run_testfile(testfile, Solution4().longestPalindrome)
     

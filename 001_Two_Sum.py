@@ -1,5 +1,5 @@
 # Solution 1: brute force
-class Solution1(object):
+class Solution(object):
     def twoSum(self, nums, target):
         """
         :type nums: List[int]
@@ -19,18 +19,24 @@ class Solution2(object):
         :type target: int
         :rtype: List[int]
         """
-        d = {}
-        for i, n in enumerate(nums):
-            if n in d.keys():
-                return sorted([i, d[n]])
+        ref = {}
+        for i in xrange(len(nums)):
+            if nums[i] in ref:
+                return [ref[nums[i]], i]
             else:
-                d[target-n] = i   
+                ref[target-nums[i]] = i
+                
 
 if __name__ == "__main__":
-    from leetcodelib import test
-    arguments = [([2, 7, 11, 15], 9)]
-    answers = [[0, 1]]
-    test(Solution1().twoSum, arguments, answers)
+    from leetcodelib import test, update_testfile, run_testfile
+    arguments = [([2, 7, 11, 15], 9), ([3, 2, 4], 6)]
+    answers = [[0, 1], [1, 2]]
     test(Solution2().twoSum, arguments, answers)
+     
+    #testfile = __file__.replace('.py', '.yaml')
+    #arg_names = ""
+    #update_testfile(testfile, arg_names, arguments, answers)
+    #run_testfile(testfile, Solution().)
+    
     
 
