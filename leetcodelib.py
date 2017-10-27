@@ -139,7 +139,7 @@ def update_testfile(testfile, arg_names, arguments, answers, mode='generate', in
         print "File is updated."
 
 
-def run_testfile(testfile, method, inds=None):
+def run_testfile(testfile, method, inds=[]):
     _, arguments, answers = load_testfile(testfile)
     test(method, arguments, answers, inds)
     return
