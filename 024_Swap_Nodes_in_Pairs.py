@@ -20,9 +20,24 @@ class Solution(object):
         #return dummy.next
         return LinkedList(dummy.next).values()
 
+class Solution2(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        dummy = ListNode(None)
+        dummy.next = head
+        prev = dummy
+        while prev.next and prev.next.next:
+            first, second = prev.next, prev.next.next
+            prev.next, second.next, first.next = second, first, second.next
+            prev = first
+        return dummy.next
+
 if __name__ == "__main__":
     from leetcodelib import test
     num_lists = [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]
     arguments = [LinkedList(nums).head for nums in num_lists]
     answers = [None, [0], [1, 0], [1, 0, 2], [1, 0, 3, 2]]
-    test(Solution().swapPairs, arguments, answers)
+    test(Solution2().swapPairs, arguments, answers)

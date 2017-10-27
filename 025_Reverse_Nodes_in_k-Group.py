@@ -28,6 +28,34 @@ class Solution(object):
         #return dummy.next
         return LinkedList(dummy.next).values()
 
+class Solution2(object):
+    def reverseKGroup(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        if k <= 1:
+            return head
+        
+        dummy = ListNode(None)
+        dummy.next = head
+        prev = dummy
+        while True:
+            h = prev
+            for i in xrange(k):
+                h = h.next
+                if not h:
+                    return dummy.next
+            
+            t = p = prev.next
+            node = p.next
+            for i in xrange(k-1):  
+                next_node = node.next
+                node.next, p, node = p, node, next_node
+            prev.next, t.next = p, next_node
+            prev = t
+            
 if __name__ == "__main__":
     from leetcodelib import test
     arguments = [(LinkedList(range(10)).head, i+1) for i in xrange(10)]
@@ -37,4 +65,4 @@ if __name__ == "__main__":
                [5, 4, 3, 2, 1, 0, 6, 7, 8, 9], [6, 5, 4, 3, 2, 1, 0, 7, 8, 9],
                [7, 6, 5, 4, 3, 2, 1, 0, 8, 9], [8, 7, 6, 5, 4, 3, 2, 1, 0, 9],
                [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]
-    test(Solution().reverseKGroup, arguments, answers)
+    test(Solution2().reverseKGroup, arguments, answers, inds=[])

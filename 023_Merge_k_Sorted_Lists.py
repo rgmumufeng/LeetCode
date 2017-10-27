@@ -89,6 +89,47 @@ class Solution3(object):
         #return dummy.next
         return LinkedList(dummy.next).values()    
 
+# Solution 4: use heap
+class Solution4(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        heap = []
+        for node in lists:
+            if node:
+                heap.append(node)
+                i = len(heap)-1
+                while (i-1)/2 >= 0:
+                    parent = (i-1)/2
+                    if heap[i].val >= heap[parent].val:
+                        break
+                    else:
+                        heap[i], heap[parent] = heap[parent], heap[i]
+                        i = parent
+                        
+        #print [x for x in heap]
+                        
+        if not heap:
+            return None
+        node = head = heap[0]
+        while len(heap) > 1:
+            heap[0] = heap[0].next if heap[0].next else heap.pop()
+            i = 0
+            while 2*i+1 < len(heap):
+                left, right = 2*i+1, 2*i+2
+                smaller = left if right >= len(heap) or heap[left].val < heap[right].val else right
+                if heap[i].val <= heap[smaller].val:
+                    break
+                else:
+                    heap[i], heap[smaller] = heap[smaller], heap[i]
+                    i = smaller
+            node.next = heap[0]
+            node = node.next
+        return head
+        
+
 if __name__ == "__main__":
     from leetcodelib import test, update_testfile, load_testfile
     from random import sample, randint
@@ -104,13 +145,15 @@ if __name__ == "__main__":
         update_testfile(testfile, arg_names, [args], [answer])
     
     arg_orders, arguments, answers = load_testfile(testfile)
+    #arguments = [[[], []]]
+    #answers = [None]
     
     #print len(arguments), len(answers)
     #print arguments[-1][0]
     #arguments = [([LinkedList(x).head for x in args[0]],) for args in arguments]
     #print arguments[-1][0]
     
-    test(Solution1().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
-    test(Solution2().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
-    test(Solution3().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
-    
+    #test(Solution1().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    #test(Solution2().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    #test(Solution3().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers)
+    test(Solution4().mergeKLists, [([LinkedList(x).head for x in args[0]],) for args in arguments], answers, inds=[])
