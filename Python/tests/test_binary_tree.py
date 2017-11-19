@@ -1,4 +1,4 @@
-from solutions.leetcodelib import BinaryTree
+from leetcodelib import BinaryTree
 
 def test_binary_tree():
     import time

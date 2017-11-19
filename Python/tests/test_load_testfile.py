@@ -1,4 +1,4 @@
-from solutions.leetcodelib import load_testfile
+from leetcodelib import load_testfile
 
 def test_load_testfile():
     import glob, os

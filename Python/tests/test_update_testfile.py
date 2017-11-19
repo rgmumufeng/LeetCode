@@ -1,4 +1,4 @@
-from solutions.leetcodelib import update_testfile
+from leetcodelib import update_testfile
 
 def test_update_testfile():
     import shutil, os

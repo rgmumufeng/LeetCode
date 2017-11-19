@@ -1,4 +1,4 @@
-from solutions.leetcodelib import LinkedList
+from leetcodelib import LinkedList
 
 def test_linked_list():
     import time

@@ -3,7 +3,7 @@ class Solution(object):
         return [a+b[0], a*b[1]]
 
 if __name__ == "__main__":
-    from solutions.leetcodelib import run_testfile
+    from leetcodelib import run_testfile
     testfile = "testfile2.yaml"
     arg_names = "a, b"
     run_testfile(testfile, Solution().testfunction)

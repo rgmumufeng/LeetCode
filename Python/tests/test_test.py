@@ -1,5 +1,5 @@
 import random
-from solutions.leetcodelib import LinkedList
+from leetcodelib import LinkedList
 
 class Solution(object):
     def func1(self, nums):
@@ -11,7 +11,7 @@ class Solution(object):
         
 
 if __name__ == "__main__":
-    from solutions.leetcodelib import test
+    from leetcodelib import test
     nums1 = random.sample(range(20), 10)
     nums2 = [None] + nums1[1:]
     arguments = [nums1, nums2]

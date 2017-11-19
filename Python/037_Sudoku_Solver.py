@@ -32,19 +32,6 @@ class Solution(object):
 
 if __name__ == "__main__":
     from leetcodelib import test, update_testfile, run_testfile
-    def load_sudo(filename):
-            with open(filename, 'r') as f:
-                data = f.readlines()
-                sudo = [l.strip().split(' ') for l in data]
-            return sudo
     
-    sudo1 = load_sudo('sudo1')
-    ans1 = load_sudo('sudo1_answer')
-    arguments = [sudo1]
-    answers = [ans1]
-    test(Solution().solveSudoku, arguments, answers)
-    
-    #testfile = __file__.replace('.py', '.yaml')
-    #arg_names = ""
-    #update_testfile(testfile, arg_names, arguments, answers)
-    #run_testfile(testfile, Solution().)
+    testfile = __file__.replace('.py', '.yaml')
+    run_testfile(testfile, Solution().solveSudoku)
