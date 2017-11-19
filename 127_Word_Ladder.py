@@ -71,4 +71,4 @@ if __name__ == "__main__":
     #arguments = []
     #answers = []
     #update_testfile(testfile, arg_names, arguments, answers, mode='add')
-    run_testfile(testfile, Solution2().ladderLength, inds=None)
+    run_testfile(testfile, Solution2().ladderLength, inds=[])
